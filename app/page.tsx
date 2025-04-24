@@ -4,6 +4,7 @@ import Transcript from '@/components/transcript'
 import AudioManager from '@/components/audio-manager'
 import { useTranscriber } from '@/hooks/useTranscriber'
 import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
   const transcriber = useTranscriber()
@@ -18,7 +19,7 @@ export default function Home() {
             </h1>
             <p className='mt-1 ml-3'>Audio to text transcription</p>
           </div>
-          <div className='flex-1'>
+          <div className='flex-1 justify-between'>
             <div className='flex items-center justify-between text-sm font-medium'>
               <span>
                 {transcriber.modelLoadingProgress === 0 && `Model not loaded`}
@@ -32,8 +33,9 @@ export default function Home() {
               className='mt-1 w-full rounded-lg'
               value={transcriber.modelLoadingProgress}
               max={1}
-            />
+              />
           </div>
+          <Button className='flex'>Load Models</Button>
         </div>
 
         <div className='mt-8 flex flex-col gap-6 sm:flex-row'>

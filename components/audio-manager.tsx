@@ -29,7 +29,6 @@ export default function AudioManager({
 }: {
   transcriber: Transcriber
 }) {
-  
   const [audioData, setAudioData] = useState<AudioData | undefined>(undefined)
   const [url, setUrl] = useState<string | undefined>(undefined)
 
@@ -62,7 +61,6 @@ export default function AudioManager({
         source: AudioSource.RECORDING,
         mimeType: data.type
       })
-      console.log('Audio data set from recording:', audioData)
     }
 
     fileReader.readAsArrayBuffer(data)
@@ -121,6 +119,13 @@ export default function AudioManager({
     }
   }, [downloadAudioFromUrl, url])
 
+  useEffect(() => {
+    if (audioData) {
+      transcriber.onInputChange()
+      transcriber.start(audioData.buffer)
+    }
+  }, [audioData])
+
   return (
     <section className='w-full rounded-lg border p-6 shadow-md'>
       <div className='flex h-full flex-col items-start gap-6'>
@@ -138,15 +143,15 @@ export default function AudioManager({
           </div>
         </div>
 
-        {audioData && (
+        {url && (
           <>
             <AudioPlayer
-              audioUrl={audioData.url}
-              mimeType={audioData.mimeType}
+              audioUrl={audioData?.url ?? ''}
+              mimeType={audioData?.mimeType ?? ''}
             />
 
             <div className='mt-auto flex w-full items-center justify-between'>
-              <Button onClick={() => transcriber.start(audioData.buffer)}>
+              <Button onClick={() => transcriber.start(audioData?.buffer)}>
                 {transcriber.isModelLoading ? (
                   <>
                     <Loader className='animate-spin' />
@@ -161,13 +166,12 @@ export default function AudioManager({
                   <span>Transcribe</span>
                 )}
               </Button>
-
-              <Button variant='outline' onClick={resetAudio}>
-                Reset
-              </Button>
             </div>
           </>
         )}
+        {/* <Button variant='outline' onClick={resetAudio}>
+          Reset
+        </Button> */}
       </div>
     </section>
   )

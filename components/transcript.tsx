@@ -1,28 +1,37 @@
 import { Transcriber } from '@/lib/types'
+import { useState } from 'react'
 
 interface Props {
   transcriber: Transcriber
 }
 
 export default function Transcript({ transcriber }: Props) {
-  const output = transcriber.output
+  const [output, setOutput] = useState<string | undefined>('')
+
+  const full_output = transcriber.output?.text
   const isProcessing = transcriber.isProcessing
+
+  if (full_output && full_output !== output) {
+    setOutput(full_output)
+  }
 
   return (
     <section className='w-full rounded-lg border p-6 shadow-md'>
       <h2 className='text-2xl font-bold'>Transcription</h2>
       <div className='mt-4 h-36 overflow-auto'>
-        {isProcessing ? (
-          <div className='flex flex-col space-y-2'>
-            <div className='h-4 animate-pulse rounded bg-gray-200'></div>
-            <div className='h-4 animate-pulse rounded bg-gray-200'></div>
-            <div className='h-4 animate-pulse rounded bg-gray-200'></div>
-            <div className='h-4 animate-pulse rounded bg-gray-200'></div>
-          </div>
-        ) : output ? (
-          <pre className='whitespace-pre-wrap'>{output.text}</pre>
+        {output ? (
+          <>
+            <pre className='whitespace-pre-wrap'>
+              {output}
+              <div className='ml-3 h-3 w-3 animate-pulse rounded-full bg-gray-300' />
+            </pre>
+          </>
+        ) : isProcessing ? (
+          <div
+            className={`h-4 rounded bg-gray-200 ${isProcessing && 'animate-pulse'}`}
+          ></div>
         ) : (
-          <p>No transcription available</p>
+          <p>No Transcribing</p>
         )}
       </div>
     </section>

@@ -3,14 +3,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Mic, Square, Play, Pause } from 'lucide-react'
+import { Transcriber } from '@/lib/types'
 
-export function AudioRecorder(
-  {
-    onLoad
-  }: {
-    onLoad: (blob: Blob) => void
-  }
-) {
+export function AudioRecorder({
+  onLoad
+}: {
+  onLoad: (blob: Blob) => void
+}) {
   const [isRecording, setIsRecording] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
@@ -19,6 +18,7 @@ export function AudioRecorder(
   const audioChunksRef = useRef<Blob[]>([])
   const streamRef = useRef<MediaStream | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const recordingTimeRef = useRef(0)
 
   // Start recording function
   const startRecording = async () => {
@@ -35,6 +35,11 @@ export function AudioRecorder(
       mediaRecorder.ondataavailable = event => {
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data)
+          const audioblob = new Blob(audioChunksRef.current, {
+            type: 'audio/wav'
+          })
+          onLoad(audioblob)
+          console.log('Recording chunk:', audioChunksRef.current)
         }
       }
 
@@ -42,11 +47,11 @@ export function AudioRecorder(
         const audioBlob = new Blob(audioChunksRef.current, {
           type: 'audio/wav'
         })
-        onLoad(audioBlob);
+        onLoad(audioBlob)
       }
 
       // Start recording
-      mediaRecorder.start()
+      mediaRecorder.start(3000)
       setIsRecording(true)
       setIsPaused(false)
       setRecordingTime(0)
@@ -54,6 +59,15 @@ export function AudioRecorder(
       // Start timer
       timerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1)
+        recordingTimeRef.current += 1
+
+        // if (recordingTimeRef.current % 3 == 0) {
+        //   const audioBlob = new Blob(audioChunksRef.current, {
+        //     type: 'audio/wav'
+        //   })
+        //   console.log('Recording chunk:', audioChunksRef.current)
+        //   onLoad(audioBlob)
+        // }
       }, 1000)
     } catch (error) {
       console.error('Error accessing microphone:', error)
@@ -105,7 +119,6 @@ export function AudioRecorder(
         streamRef.current.getTracks().forEach(track => track.stop())
         streamRef.current = null
       }
-
     }
   }
 

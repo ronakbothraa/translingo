@@ -9,7 +9,7 @@ export default function Transcript({ transcriber }: Props) {
   const isProcessing = transcriber.isProcessing
 
   return (
-    <section className='w-full max-w-2xl rounded-lg border p-6 shadow-md'>
+    <section className='w-full rounded-lg border p-6 shadow-md'>
       <h2 className='text-2xl font-bold'>Transcription</h2>
       <div className='mt-4 h-36 overflow-auto'>
         {isProcessing ? (

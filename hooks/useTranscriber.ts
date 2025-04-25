@@ -44,6 +44,7 @@ export function useTranscriber(): Transcriber {
 
   const start = useCallback(
     async (audioData: AudioBuffer | undefined) => {
+      
       if (audioData) {
         setOutput(undefined)
         setIsProcessing(true)

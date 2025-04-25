@@ -122,7 +122,7 @@ export default function AudioManager({
   }, [downloadAudioFromUrl, url])
 
   return (
-    <section className='w-full max-w-2xl rounded-lg border p-6 shadow-md'>
+    <section className='w-full rounded-lg border p-6 shadow-md'>
       <div className='flex h-full flex-col items-start gap-6'>
         <div className='flex w-full justify-between'>
           <div className='flex'>

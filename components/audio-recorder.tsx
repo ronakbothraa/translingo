@@ -162,12 +162,6 @@ export function AudioRecorder(
           </>
         )}
       </div>
-
-      {isRecording && (
-        <div className='text-muted-foreground text-sm'>
-          {isPaused ? 'Recording paused' : 'Recording...'}
-        </div>
-      )}
     </div>
   )
 }

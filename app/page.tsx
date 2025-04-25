@@ -47,7 +47,7 @@ export default function Home() {
             <Transcript transcriber={transcriber} />
           </div>
           <div className='w-1/2'>
-            <Translate />
+            <Translate transcriber={transcriber} />
           </div>
         </div>
       </div>

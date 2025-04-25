@@ -31,7 +31,7 @@ export default function Transcript({ transcriber }: Props) {
             className={`h-4 rounded bg-gray-200 ${isProcessing && 'animate-pulse'}`}
           ></div>
         ) : (
-          <p>No Transcribing</p>
+          <p>Start Speaking</p>
         )}
       </div>
     </section>

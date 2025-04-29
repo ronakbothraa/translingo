@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Mic, Square, Play, Pause } from 'lucide-react'
-import { Transcriber } from '@/lib/types'
 
 export function AudioRecorder({
   onLoad

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Combobox } from './language-selector'
+import { SelectLanguage } from './language-selector'
 import { Transcriber } from '@/lib/types'
 
 interface Props {
@@ -13,6 +13,18 @@ function Translate({ transcriber }: Props) {
   const sourceText = transcriber.output?.text
 
   console.log('Current translatedText state:', translatedText)
+  
+  async function selectedLanguage(language: string): Promise<void> {
+    const a = await fetch('http://localhost:5000/start', {
+      method: 'POST',
+      body: JSON.stringify({
+        outputLanguage: language
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => console.log(res.json()))
+  }
 
   useEffect(() => {
     const performTranslation = async (textToTranslate: string) => {
@@ -32,7 +44,6 @@ function Translate({ transcriber }: Props) {
         const data = await res.json()
         console.log('Translation response: ', data)
         setTranslatedText(data[0].translated_text)
-
       } catch (error) {
         console.error('Translation failed:', error)
       } finally {
@@ -51,7 +62,7 @@ function Translate({ transcriber }: Props) {
     <div className='w-full rounded-lg border p-6 shadow-md'>
       <section className='flex justify-between'>
         <h2 className='text-2xl font-bold'>Translation</h2>
-        <Combobox />
+        <SelectLanguage onChange={selectedLanguage} />
       </section>
       <div className='mt-4 h-36 overflow-auto'>
         {translatedText ? (

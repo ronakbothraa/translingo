@@ -21,7 +21,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 
-const languageOptions = [
+export const languageOptions = [
   {
     value: 'ace_Arab',
     label: 'Achinese (Arabic script)'
@@ -756,19 +756,7 @@ const languageOptions = [
   }
 ]
 
-export function Combobox() {
-
-  async function selectedLanguage(language: string): Promise<void> {
-    const a = await fetch('http://localhost:5000/start', {
-      method: 'POST',
-      body: JSON.stringify({
-        outputLanguage: language
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(res => console.log(res.json()))
-  }
+export function SelectLanguage({ onChange }: { onChange?: (language: string) => void }) {
 
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('')
@@ -803,7 +791,7 @@ export function Combobox() {
                   onSelect={currentLabel => {
                     setValue(currentLabel === value ? '' : currentLabel)
                     setOpen(false)
-                    selectedLanguage(languageOption.value)
+                    onChange?.(languageOption.value)
                   }}
                 >
                   {languageOption.label}

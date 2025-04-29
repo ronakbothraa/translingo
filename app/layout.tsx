@@ -10,6 +10,8 @@ import {
 } from '@clerk/nextjs'
 import Providers from '@/components/providers'
 import './globals.css'
+import { Button } from '@/components/ui/button'
+import CreateCloneButton from '@/components/create-clone'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -43,6 +45,7 @@ export default function RootLayout({
               <SignUpButton />
             </SignedOut>
             <SignedIn>
+              <CreateCloneButton />
               <UserButton />
             </SignedIn>
           </header>

@@ -1,5 +1,5 @@
-from flask import render_template, request, jsonify, make_response, Flask
-from SpeechToTranslate import SpeechToTranslate
+from flask import request, jsonify, Flask
+from main import SpeechToTranslate
 import requests
 from pydub import AudioSegment
 from pydub.playback import play
@@ -33,7 +33,8 @@ def translation():
     transcription = request.get_json()
     transcription = transcription.get('text')
     translation = s2t.translate(transcription)
-    print(f"translation: {translation}")
+    
+
     return jsonify({"translated_text": translation}, 200)
 
 

@@ -1,5 +1,6 @@
 'use client'
 
+import { toast } from 'sonner'
 import React, { useRef, useState } from 'react'
 import { Button } from './ui/button'
 import {
@@ -15,6 +16,7 @@ import { generatePronunciation } from '@/lib/gemini'
 
 import { SelectLanguage } from './language-selector'
 import { Mic, Pause, Play, Square } from 'lucide-react'
+import { Textarea } from './ui/textarea'
 
 const CreateCloneButton = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,6 +29,9 @@ const CreateCloneButton = () => {
   const [inputLanguage, setInputLanguage] = useState('')
   const [outputLanguage, setOutputLanguage] = useState('')
 
+  const [generatingPronunciation, setGeneratingPronunciation] = useState(false)
+  const [pronunciation, setPronunciation] = useState('')
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const streamRef = useRef<MediaStream | null>(null)
@@ -34,16 +39,25 @@ const CreateCloneButton = () => {
   const recordingTimeRef = useRef(0)
 
   const handlePronunciation = async () => {
-    if (inputLanguage !== "" && outputLanguage != "") {
-      const response = await generatePronunciation({
-        inpLang: inputLanguage,
-        outLang: outputLanguage
-      })
-      console.log(response)
+    if (inputLanguage !== '' && outputLanguage != '') {
+      setGeneratingPronunciation(true)
+      try {
+        const response = await generatePronunciation({
+          inpLang: inputLanguage,
+          outLang: outputLanguage
+        })
+        setPronunciation(response)
+        return response
+      } catch (error) {
+        toast.error('Error generating pronunciation.')
+      }
+    } else {
+      toast.error('Please select both input and output languages.')
     }
     setInputLanguage('')
     setOutputLanguage('')
-    return ""
+    setGeneratingPronunciation(false)
+    return ''
   }
 
   const formatTime = (seconds: number) => {
@@ -51,7 +65,6 @@ const CreateCloneButton = () => {
     const secs = seconds % 60
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
-
   const startRecording = async () => {
     try {
       // Request microphone access
@@ -116,8 +129,6 @@ const CreateCloneButton = () => {
       }
     }
   }
-
-  // Stop recording function
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       // Stop recording
@@ -138,6 +149,7 @@ const CreateCloneButton = () => {
       }
     }
   }
+
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -149,21 +161,21 @@ const CreateCloneButton = () => {
         <DialogContent className='sm:max-w-[600px]'>
           <DialogHeader>
             <DialogTitle>Create Clone</DialogTitle>
-            <DialogDescription>
-              <div className='flex items-center justify-between'>
-                <span>Language you're fluent in: </span>
-                <SelectLanguage onChange={setInputLanguage} />
-              </div>
-              <div className='mt-4 flex items-center justify-between'>
-                <span>Language you want to clone: </span>
-                <SelectLanguage onChange={setOutputLanguage} />
+            <DialogDescription asChild>
+              <div>
+                <div className='flex items-center justify-between'>
+                  <span>Language you're fluent in: </span>
+                  <SelectLanguage onChange={setInputLanguage} />
+                </div>
+                <div className='mt-4 flex items-center justify-between'>
+                  <span>Language you want to clone: </span>
+                  <SelectLanguage onChange={setOutputLanguage} />
+                </div>
               </div>
             </DialogDescription>
           </DialogHeader>
-          
-          {inputLanguage && outputLanguage && handlePronunciation()}
 
-
+          <Textarea className='max-h-[350px]' placeholder={`${pronunciation}`} />
           {audioData && audioUrl && (
             <div className='mt-4 w-full'>
               <h3 className='mb-2 text-sm font-medium'>Recorded Audio</h3>
@@ -174,39 +186,59 @@ const CreateCloneButton = () => {
           )}
 
           <DialogFooter>
-            {!isRecording ? (
-              <Button onClick={startRecording} size='icon' variant='default'>
-                <Mic className='h-5 w-5' />
+            <div className='flex w-full items-center justify-between'>
+              <Button
+                className='flex bg-blue-700 hover:bg-blue-800'
+                onClick={handlePronunciation}
+                disabled={generatingPronunciation}
+              >
+                Generate
               </Button>
-            ) : (
-              <>
-                <div className='flex w-full items-center justify-center'>
-                  <div className='font-mono text-lg'>
-                    {formatTime(recordingTime)}
-                  </div>
-                  {isRecording && !isPaused && (
-                    <div className='ml-3 h-3 w-3 animate-pulse rounded-full bg-red-500' />
-                  )}
-                </div>
-                <Button onClick={pauseRecording} size='icon' variant='outline'>
-                  {isPaused ? (
-                    <Play className='h-5 w-5' />
-                  ) : (
-                    <Pause className='h-5 w-5' />
-                  )}
-                </Button>
+              <div className='flex items-center gap-x-2 sm:gap-x-4'>
+                {!isRecording ? (
+                  <Button
+                    className='flex'
+                    onClick={startRecording}
+                    size='icon'
+                    variant='default'
+                  >
+                    <Mic className='h-5 w-5' />
+                  </Button>
+                ) : (
+                  <>
+                    <div className='flex items-center justify-center'>
+                      <div className='min-w-[50px] text-right font-mono text-sm sm:text-lg'>
+                        {formatTime(recordingTime)}
+                      </div>
+                      {isRecording && !isPaused && (
+                        <div className='ml-3 h-3 w-3 animate-pulse rounded-full bg-red-500' />
+                      )}
+                    </div>
+                    <Button
+                      onClick={pauseRecording}
+                      size='icon'
+                      variant='outline'
+                    >
+                      {isPaused ? (
+                        <Play className='h-5 w-5' />
+                      ) : (
+                        <Pause className='h-5 w-5' />
+                      )}
+                    </Button>
 
-                <Button
-                  onClick={stopRecording}
-                  size='icon'
-                  variant='destructive'
-                >
-                  <Square className='h-5 w-5' />
-                </Button>
-              </>
-            )}
+                    <Button
+                      onClick={stopRecording}
+                      size='icon'
+                      variant='destructive'
+                    >
+                      <Square className='h-5 w-5' />
+                    </Button>
+                  </>
+                )}
 
-            <Button className='max-w-[70px] bg-green-700'>Save</Button>
+                <Button className='max-w-[70px] bg-green-700'>Save</Button>
+              </div>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>

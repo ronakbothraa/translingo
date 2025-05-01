@@ -9,12 +9,14 @@ interface Props {
 function Translate({ transcriber }: Props) {
   const [translatedText, setTranslatedText] = useState<string | undefined>('')
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedLanguage, setSelectedLanguage] = useState<string>('en')
 
   const sourceText = transcriber.output?.text
 
   console.log('Current translatedText state:', translatedText)
   
-  async function selectedLanguage(language: string): Promise<void> {
+  async function changeSelectedLanguage(language: string): Promise<void> {
+    setSelectedLanguage(language)
     const a = await fetch('http://localhost:5000/start', {
       method: 'POST',
       body: JSON.stringify({
@@ -62,7 +64,7 @@ function Translate({ transcriber }: Props) {
     <div className='w-full rounded-lg border p-6 shadow-md'>
       <section className='flex justify-between'>
         <h2 className='text-2xl font-bold'>Translation</h2>
-        <SelectLanguage onChange={selectedLanguage} />
+        <SelectLanguage onChange={changeSelectedLanguage} />
       </section>
       <div className='mt-4 h-36 overflow-auto'>
         {translatedText ? (

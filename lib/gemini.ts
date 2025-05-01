@@ -34,5 +34,5 @@ Here are the specific rules and requirements for this request:
     model: 'gemini-2.0-flash',
     contents: prompt
   })
-  console.log(response?.text || "Failed to generate pronunciation guide");
+  return response?.text || "Failed to generate pronunciation guide";
 }

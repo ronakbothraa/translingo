@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Mic, Square, Play, Pause } from 'lucide-react'
 
 export function AudioRecorder({
-  onLoad
+  onLoad,
 }: {
   onLoad: (blob: Blob) => void
 }) {

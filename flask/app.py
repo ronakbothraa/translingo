@@ -34,23 +34,34 @@ def translation():
     transcription = transcription.get('text')
     translation = s2t.translate(transcription)
     
-
     return jsonify({"translated_text": translation}, 200)
 
 
-# @app.route('/tts', methods=['POST'])
-# def generate_tts():
-#     input_text = request.get_json().get('translatedData')
-#     try:
-#         response = requests.post("http://127.0.0.1:8000/tts", json={"input": input_text})
-#         print(f"TTS API response: {response.status_code}, {response.text}")
-#         if response.status_code == 200:
-#             audio = AudioSegment.from_wav("text_to_speech/output.wav")
-#             play(audio)
-#             os.remove(f"saved_audio_files/audio.wav")
-#             return jsonify({"message": "TTS generation complete"}), 200
-#         else:
-#             return jsonify({"error": "TTS generation failed", "details": response.text}), 500
-#     except Exception as e:
-#         print(f"Error in generate_tts: {e}")
-#         return jsonify({"error": "Internal server error"}), 500
+@app.route("/getTranslatedText", methods=["GET"])
+def get_translated_text():
+    print({"translated_text": s2t.translated_text, "language": s2t.output_lang})
+    try:
+        return jsonify({"translated_text": s2t.translated_text, "language": s2t.output_lang}), 200
+    except Exception as e:
+        return {"error": "Internal server error", "details": str(e)}, 500
+
+@app.route('/tts', methods=['POST'])
+def generate_tts():
+    response = request.get_json()
+    input_text = response.get("translated_text")
+    langauge = response.get("language")
+    audio_url = response.get("audio_url")
+    print(f"Received data: {response}")
+    try:
+        response = requests.post("http://127.0.0.0:8000/tts", json={"input": input_text, "language": langauge, "audio_url": audio_url})
+        print(f"TTS API response: {response.status_code}, {response.text}")
+        if response.status_code == 200:
+            audio = AudioSegment.from_wav("../cloning/output.wav")
+            play(audio)
+            os.remove(f"saved_audio_files/audio.wav")
+            return jsonify({"message": "TTS generation complete"}), 200
+        else:
+            return jsonify({"error": "TTS generation failed", "details": response.text}), 500
+    except Exception as e:
+        print(f"Error in generate_tts: {e}")
+        return jsonify({"error": "Internal server error"}), 500

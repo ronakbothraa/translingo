@@ -61,9 +61,37 @@ export default function AudioManager({
         source: AudioSource.RECORDING,
         mimeType: data.type
       })
+
     }
 
     fileReader.readAsArrayBuffer(data)
+  }
+
+  const voiceClone = async (audioUrl: string): Promise<string> => {
+    const response = await fetch('http://localhost:5000/getTranslatedText')
+    const responseData = await response.json()
+
+    // Access properties from the object
+    const translated_text = responseData.translated_text
+    const language = responseData.language
+
+    console.log('Translated text:', translated_text)
+    console.log('Language:', language)
+    console.log('Audio URL:', audioUrl)
+
+    const audioResponse = await fetch(`http://127.0.0.1:5000/tts`, {
+      method: 'POST',
+      body: JSON.stringify({
+        text: translated_text,
+        audioUrl,
+        language: language
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return ''
   }
 
   const downloadAudioFromUrl = useCallback(
@@ -138,6 +166,7 @@ export default function AudioManager({
               onLoad={data => {
                 transcriber.onInputChange()
                 setAudioFromRecording(data)
+                voiceClone(URL.createObjectURL(data))
               }}
             />
           </div>

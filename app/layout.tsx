@@ -10,7 +10,7 @@ import {
 } from '@clerk/nextjs'
 import Providers from '@/components/providers'
 import './globals.css'
-import { Button } from '@/components/ui/button'
+import { Toaster } from "@/components/ui/sonner"
 import CreateCloneButton from '@/components/create-clone'
 
 const geistSans = Geist({
@@ -50,6 +50,7 @@ export default function RootLayout({
             </SignedIn>
           </header>
           <Providers>{children}</Providers>
+          <Toaster richColors />
         </body>
       </html>
     </ClerkProvider>

@@ -30,8 +30,6 @@ except ImportError:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# --- Global Variables and Configuration ---
-# Load these from environment variables or a config file in a real app
 MODEL_NAME = os.environ.get("TTS_MODEL_NAME", "F5TTS_v1_Base")
 # Download checkpoint if CKPT_FILE env var is not set
 DEFAULT_CKPT_FILE = str(hf_hub_download(repo_id="SWivid/F5-TTS", filename=f"{MODEL_NAME}/model_1250000.safetensors"))

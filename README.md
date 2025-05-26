@@ -152,5 +152,3 @@ https://github.com/user-attachments/assets/38b549bf-011f-4f57-a205-ed48f9ee12d8
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details (assuming you choose MIT and add a LICENSE.md file).
 
 ---
-
-Let me know if you'd like any section expanded or modified!

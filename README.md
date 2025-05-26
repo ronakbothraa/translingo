@@ -2,7 +2,9 @@
 
 **TranLingo is an innovative speech-to-speech translation application that not only translates your words but also speaks them back in a cloned version of your own voice!** Experience near real-time voice translation with personalized voice output.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ## ✨ Overview
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+
+## ✨ Overview
 
 TranLingo aims to break down language barriers by providing a seamless speech-to-speech translation experience. A key feature is its ability to perform one-shot voice cloning, requiring only 10-15 seconds of your audio. This cloned voice is then used for the Text-to-Speech (TTS) output in the target language, offering a more personal and engaging translation.
 

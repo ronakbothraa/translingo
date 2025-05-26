@@ -88,7 +88,7 @@ Follow these instructions to set up and run TranLingo locally on your machine.
         source venv/bin/activate # On Windows use `venv\Scripts\activate`
         pip install Flask <libraryA> <libraryB> ...
         ```
-        *(Again, a `requirements.txt` file here would be beneficial.)*
+        
 
 ### Running Locally
 
@@ -142,18 +142,10 @@ Contributions are welcome! If you'd like to contribute, please fork the reposito
 
 *(You can add more specific contribution guidelines here, e.g., coding standards, branch naming conventions.)*
 
-## ❓ Further Details for Your Consideration
+## ❓ Working Demo
 
-To make this README even better, you might want to add or clarify:
+https://github.com/user-attachments/assets/38b549bf-011f-4f57-a205-ed48f9ee12d8
 
-* **Specific Python/Node.js Versions:** Mention the recommended or tested versions.
-* **`requirements.txt` / `package.json`:** Ensure these are complete and up-to-date for easier installation. It's highly recommended to create `requirements.txt` for each Flask service.
-* **Environment Variables:** Provide a template or list of all required environment variables (e.g., `.env.example` file). This is crucial for others to set up the project.
-* **Database Setup:** Any specific instructions for setting up the PostgreSQL database schema?
-* **API Key Acquisition:** Links or brief instructions on how to obtain the necessary API keys.
-* **Deployment:** If you have instructions for deploying TranLingo, they would be valuable.
-* **Screenshots/GIFs:** Visuals can greatly enhance the README and showcase your app's functionality.
-* **Detailed API Documentation (if applicable):** If your Flask backends expose APIs that can be used by others.
 
 ## 📜 License
 
